@@ -1,0 +1,92 @@
+Nx := 2048 // *2
+Ny := 10 // *2
+Nz := 1
+
+cx := 2e-09
+cy := 5e-09
+cz := 2e-09
+
+setgridsize(Nx, Ny, Nz)
+setcellsize(cx, cy, cz)
+
+SetPBC(16, 2048, 0)
+
+square1 := cuboid(Nx*cx,  Ny*cy, Nz*cz)
+
+defregion(1, square1)
+setgeom(square1)
+
+Snapshot(geom)
+Snapshot(regions)
+
+Ms_1   := 1344e03
+Aex_1  := 13.6e-12
+Dind_1 := 0e-3
+
+Q := 1.2
+Ku1 = Q * (0.5*mu0*Ms_1*Ms_1)
+anisU = vector(0, 0, 1)
+
+
+Msat.SetRegion(1, Ms_1)
+Aex.SetRegion(1, Aex_1)
+Dind.SetRegion(1, Dind_1)
+
+addition := 1e-6
+// B0 := 0.3713
+B0 := 0.3724
+B_ext = vector(B0-addition, addition, 0)
+m=uniform(1-addition, addition,0)
+
+
+
+// ABC - ASSIGNING DAMPING VALUES
+
+alpha0 := 0.1
+alpha = alpha0
+
+
+
+snapshot(alpha)
+snapshot(Msat)
+snapshot(Aex)
+snapshot(Dind)
+
+
+relax()
+
+snapshot(m)
+Save(B_demag)
+
+
+
+// Dynamic simulations
+k0 := (200e6)*cx // *cx in order to convert to proper units
+x00 := Nx/2 // center of excitation area
+xp := 0.0
+t = 0
+
+
+f_cut := 20e09
+t_sampl := 0.5/(f_cut*1.1)
+t0 := t + 10/f_cut
+
+
+sz := 1.0
+kcut:=200e6
+mask:=newVectorMask(Nx,Ny,Nz)  //maska = funkcja w przestzreni
+for i:=0; i<Nx; i++{
+	r:=index2coord(i,0,0)  //polozenie komorki [m]
+	x:=r.x()
+	Bxyz:=sinc(kcut*x) 
+	for j:=0; j<Nz; j++{
+		sz = (1-0.1*randNorm())
+		mask.setVector(i,0,j,vector(Bxyz*sz,Bxyz*sz,Bxyz*sz))
+	}
+}
+B_ext.add(mask, 0.001*sinc(2*pi*f_cut*(t-t0)))    //czesc przestrzenna razy czesc czasowa 
+
+autosave(m, t_sampl)
+run(400*t_sampl)
+Snapshot(m)
+saveas(m, "m_final")

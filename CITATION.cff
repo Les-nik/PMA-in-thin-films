@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this code or data, please cite the article."
+title: "PMA-in-thin-films: code and data for 'Perpendicular magnetic anisotropy in thin films enables extraordinary spin-wave phenomena'"
+authors:
+  - family-names: "Leśniewski"
+    given-names: "Nikodem"
+repository-code: "https://github.com/Les-nik/PMA-in-thin-films"
+license: MIT
+preferred-citation:
+  type: article
+  title: "Perpendicular Magnetic Anisotropy in Thin Films Enables Extraordinary Spin-Wave Phenomena: Anti-Larmor Precession, Negative Reflection and Refraction, Multireflection and Multirefraction"
+  authors:
+    - family-names: "Leśniewski"
+      given-names: "Nikodem"
+    - family-names: "Dadoenkova"
+      given-names: "Yuliya S."
+    - family-names: "Bentivegna"
+      given-names: "Florian F. L."
+    - family-names: "Gruszecki"
+      given-names: "Paweł"
+  journal: "ACS Applied Materials & Interfaces"
+  volume: 18
+  issue: 6
+  start: 10539
+  end: 10551
+  year: 2026
+  doi: "10.1021/acsami.5c21700"
